@@ -699,8 +699,8 @@
         canvas.addEventListener("mouseleave", function () { mouse.active = false; });
         function handleTrigger(px, py) {
           clickCount++;
-          // 1/10 확률 또는 매 10 번째 → easter egg supernova
-          if (Math.random() < 0.1 || clickCount % 10 === 0) {
+          // ~17% 확률 또는 매 10 번째 → easter egg supernova
+          if (Math.random() < 0.17 || clickCount % 10 === 0) {
             spawnEasterEgg(px, py);
           } else {
             spawnPulse(px, py);
