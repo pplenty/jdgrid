@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>jdgrid — solo developer building open utilities</title>
+    <meta
+      name="description"
+      content="jdgrid is a solo developer building open dev utilities. Current project: yutils, a free collection of 66 browser-based dev tools and 26 guides."
+    />
+    <link rel="canonical" href="https://jdgrid.com/" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta property="og:title" content="jdgrid — solo developer building open utilities" />
+    <meta
+      property="og:description"
+      content="Free dev tools and writing. Current project: yutils."
+    />
+    <meta property="og:url" content="https://jdgrid.com/" />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/favicon.ico" />
+    <style>
+      :root {
+        --bg: #ffffff;
+        --fg: #0f172a;
+        --fg-muted: #475569;
+        --fg-subtle: #94a3b8;
+        --line: #e2e8f0;
+        --surface: #f8fafc;
+        --accent: #475569; /* slate — yutils brand 톤 정합 */
+        --accent-fg: #ffffff;
+        --radius: 10px;
+        --maxw: 640px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0a0a0a;
+          --fg: #f1f5f9;
+          --fg-muted: #94a3b8;
+          --fg-subtle: #64748b;
+          --line: #1e293b;
+          --surface: #111827;
+          --accent: #cbd5e1;
+          --accent-fg: #0a0a0a;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family:
+          ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+          "Noto Sans KR", sans-serif;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+        font-size: 16px;
+      }
+      a {
+        color: var(--fg);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .wrap {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        padding: 80px 24px 64px;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 80px;
+      }
+      .brand {
+        font-weight: 700;
+        font-size: 20px;
+        letter-spacing: -0.02em;
+      }
+      .nav {
+        display: flex;
+        gap: 18px;
+        font-size: 14px;
+        color: var(--fg-muted);
+      }
+      .nav a:hover {
+        color: var(--fg);
+      }
+      h1 {
+        font-size: 36px;
+        line-height: 1.2;
+        letter-spacing: -0.03em;
+        font-weight: 700;
+        margin: 0 0 16px;
+      }
+      .tagline {
+        color: var(--fg-muted);
+        font-size: 18px;
+        max-width: 520px;
+        margin: 0 0 48px;
+      }
+      .section-label {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--fg-subtle);
+        margin: 64px 0 20px;
+      }
+      .project {
+        display: block;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 24px;
+        background: var(--surface);
+        transition: border-color 0.15s ease;
+      }
+      .project:hover {
+        border-color: var(--fg-muted);
+        text-decoration: none;
+      }
+      .project-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+      .project-name {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .project-status {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #16a34a;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .project-status::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #16a34a;
+      }
+      .project-desc {
+        color: var(--fg-muted);
+        font-size: 15px;
+        margin: 8px 0 16px;
+      }
+      .project-link {
+        color: var(--accent);
+        font-family: ui-monospace, "JetBrains Mono", monospace;
+        font-size: 13px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .project:hover .project-link {
+        gap: 10px;
+      }
+      .divider {
+        border: 0;
+        border-top: 1px solid var(--line);
+        margin: 64px 0 0;
+      }
+      footer {
+        margin-top: 48px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--fg-subtle);
+        font-size: 13px;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      footer a {
+        color: var(--fg-muted);
+      }
+      footer a:hover {
+        color: var(--fg);
+      }
+      .footer-links {
+        display: flex;
+        gap: 16px;
+      }
+      @media (max-width: 600px) {
+        .wrap {
+          padding: 56px 20px 48px;
+        }
+        header {
+          margin-bottom: 56px;
+        }
+        h1 {
+          font-size: 28px;
+        }
+        .tagline {
+          font-size: 16px;
+        }
+        .project-name {
+          font-size: 19px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="brand">jdgrid</div>
+        <nav class="nav">
+          <a href="#projects">Projects</a>
+          <a href="/about.html">About</a>
+          <a href="mailto:support@jdgrid.com">Contact</a>
+        </nav>
+      </header>
+
+      <main>
+        <h1>Solo developer building open utilities for everyday devs.</h1>
+        <p class="tagline">
+          Shipping small useful tools, one at a time. Currently focused on
+          yutils, a free collection of browser-based dev utilities and
+          long-form guides.
+        </p>
+
+        <h2 class="section-label" id="projects">Projects</h2>
+
+        <a class="project" href="https://yutils.jdgrid.com">
+          <div class="project-head">
+            <span class="project-name">yutils</span>
+            <span class="project-status">Live</span>
+          </div>
+          <p class="project-desc">
+            66 free dev tools and 26 guides. JSON formatting, JWT decoding,
+            Kubernetes YAML visualization, regex testing, and more — all
+            running entirely in your browser. Available in Korean and
+            English.
+          </p>
+          <span class="project-link">yutils.jdgrid.com →</span>
+        </a>
+
+        <hr class="divider" />
+
+        <footer>
+          <span>© 2026 jdgrid</span>
+          <nav class="footer-links">
+            <a href="/about.html">About</a>
+            <a href="/privacy.html">Privacy</a>
+            <a href="/terms.html">Terms</a>
+            <a href="mailto:support@jdgrid.com">Contact</a>
+          </nav>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>
