@@ -17,7 +17,19 @@
     />
     <meta property="og:url" content="https://jdgrid.com/" />
     <meta property="og:type" content="website" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      // 첫 페인트 전 테마 적용 — flash 방지. localStorage 우선,
+      // 미설정 시 OS prefers-color-scheme 따름 (CSS @media 처리).
+      (function () {
+        try {
+          var t = localStorage.getItem("jdgrid-theme");
+          if (t === "light" || t === "dark") {
+            document.documentElement.setAttribute("data-theme", t);
+          }
+        } catch (e) {}
+      })();
+    </script>
     <style>
       :root {
         --bg: #ffffff;
@@ -28,11 +40,13 @@
         --surface: #f8fafc;
         --accent: #475569; /* slate — yutils brand 톤 정합 */
         --accent-fg: #ffffff;
+        --canvas-dot: #94a3b8;
+        --canvas-line: #cbd5e1;
         --radius: 10px;
         --maxw: 640px;
       }
       @media (prefers-color-scheme: dark) {
-        :root {
+        :root:not([data-theme="light"]) {
           --bg: #0a0a0a;
           --fg: #f1f5f9;
           --fg-muted: #94a3b8;
@@ -41,7 +55,21 @@
           --surface: #111827;
           --accent: #cbd5e1;
           --accent-fg: #0a0a0a;
+          --canvas-dot: #64748b;
+          --canvas-line: #334155;
         }
+      }
+      :root[data-theme="dark"] {
+        --bg: #0a0a0a;
+        --fg: #f1f5f9;
+        --fg-muted: #94a3b8;
+        --fg-subtle: #64748b;
+        --line: #1e293b;
+        --surface: #111827;
+        --accent: #cbd5e1;
+        --accent-fg: #0a0a0a;
+        --canvas-dot: #64748b;
+        --canvas-line: #334155;
       }
       * {
         box-sizing: border-box;
@@ -60,6 +88,7 @@
         line-height: 1.55;
         -webkit-font-smoothing: antialiased;
         font-size: 16px;
+        transition: background-color 0.2s ease, color 0.2s ease;
       }
       a {
         color: var(--fg);
@@ -68,6 +97,23 @@
       a:hover {
         text-decoration: underline;
         text-underline-offset: 3px;
+      }
+      /* AI-틱 시각화 — hero 뒤 constellation/neural-net canvas */
+      .hero-canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .hero {
+        position: relative;
+        min-height: 320px;
+      }
+      .hero > * {
+        position: relative;
+        z-index: 1;
       }
       .wrap {
         max-width: var(--maxw);
@@ -84,15 +130,68 @@
         font-weight: 700;
         font-size: 20px;
         letter-spacing: -0.02em;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--fg);
+      }
+      .brand-mark {
+        display: block;
+        color: var(--fg);
       }
       .nav {
         display: flex;
+        align-items: center;
         gap: 18px;
         font-size: 14px;
         color: var(--fg-muted);
       }
       .nav a:hover {
         color: var(--fg);
+      }
+      .theme-toggle {
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 6px;
+        cursor: pointer;
+        color: var(--fg-muted);
+        transition: border-color 0.15s ease, color 0.15s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .theme-toggle:hover {
+        border-color: var(--fg-muted);
+        color: var(--fg);
+      }
+      .theme-toggle svg {
+        display: block;
+      }
+      .theme-toggle .icon-moon {
+        display: none;
+      }
+      :root[data-theme="dark"] .theme-toggle .icon-sun,
+      :root:not([data-theme]) .theme-toggle .icon-sun {
+        display: none;
+      }
+      :root[data-theme="dark"] .theme-toggle .icon-moon,
+      :root:not([data-theme]) .theme-toggle .icon-moon {
+        display: block;
+      }
+      :root[data-theme="light"] .theme-toggle .icon-sun {
+        display: block;
+      }
+      :root[data-theme="light"] .theme-toggle .icon-moon {
+        display: none;
+      }
+      @media (prefers-color-scheme: light) {
+        :root:not([data-theme]) .theme-toggle .icon-sun {
+          display: block;
+        }
+        :root:not([data-theme]) .theme-toggle .icon-moon {
+          display: none;
+        }
       }
       h1 {
         font-size: 36px;
@@ -213,26 +312,66 @@
           font-size: 19px;
         }
       }
+      @media (prefers-reduced-motion: reduce) {
+        .hero-canvas {
+          display: none;
+        }
+      }
     </style>
   </head>
   <body>
     <div class="wrap">
       <header>
-        <div class="brand">jdgrid</div>
+        <div class="brand">
+          <svg class="brand-mark" width="22" height="22" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.4">
+              <path d="M 16 16 C 19 13, 23 12, 26 14" />
+              <path d="M 16 16 C 13 19, 9 20, 6 18" />
+            </g>
+            <g fill="currentColor">
+              <circle cx="16" cy="16" r="2.6" />
+              <circle cx="20" cy="13.5" r="1.4" />
+              <circle cx="24" cy="12" r="1.1" />
+              <circle cx="27" cy="14.5" r="0.8" />
+              <circle cx="12" cy="18.5" r="1.4" />
+              <circle cx="8" cy="20" r="1.1" />
+              <circle cx="5" cy="17.5" r="0.8" />
+            </g>
+          </svg>
+          <span>jdgrid</span>
+        </div>
         <nav class="nav">
           <a href="#projects">Projects</a>
-          <a href="/about.html">About</a>
+          <a href="/about">About</a>
           <a href="mailto:support@jdgrid.com">Contact</a>
+          <button
+            type="button"
+            class="theme-toggle"
+            id="theme-toggle"
+            aria-label="Toggle theme"
+            title="Toggle theme"
+          >
+            <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+            </svg>
+            <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+          </button>
         </nav>
       </header>
 
       <main>
-        <h1>Solo developer building open utilities for everyday devs.</h1>
-        <p class="tagline">
-          Shipping small useful tools, one at a time. Currently focused on
-          yutils, a free collection of browser-based dev utilities and
-          long-form guides.
-        </p>
+        <section class="hero">
+          <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
+          <h1>Solo developer building open utilities for everyday devs.</h1>
+          <p class="tagline">
+            Shipping small useful tools, one at a time. Currently focused on
+            yutils, a free collection of browser-based dev utilities and
+            long-form guides.
+          </p>
+        </section>
 
         <h2 class="section-label" id="projects">Projects</h2>
 
@@ -255,13 +394,161 @@
         <footer>
           <span>© 2026 jdgrid</span>
           <nav class="footer-links">
-            <a href="/about.html">About</a>
-            <a href="/privacy.html">Privacy</a>
-            <a href="/terms.html">Terms</a>
+            <a href="/about">About</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/terms">Terms</a>
             <a href="mailto:support@jdgrid.com">Contact</a>
           </nav>
         </footer>
       </main>
     </div>
+
+    <script>
+      // 테마 토글 — localStorage 기반. 명시 선택 우선, 없으면 OS 따름.
+      (function () {
+        var btn = document.getElementById("theme-toggle");
+        if (!btn) return;
+        btn.addEventListener("click", function () {
+          var cur = document.documentElement.getAttribute("data-theme");
+          var sysDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var next;
+          if (!cur) {
+            // OS 따르던 중 → 명시적으로 반대로
+            next = sysDark ? "light" : "dark";
+          } else if (cur === "dark") {
+            next = "light";
+          } else {
+            next = "dark";
+          }
+          document.documentElement.setAttribute("data-theme", next);
+          try {
+            localStorage.setItem("jdgrid-theme", next);
+          } catch (e) {}
+        });
+      })();
+    </script>
+
+    <script>
+      // Hero 배경 — neural-net / constellation 스타일 시각화.
+      // 30-40 점이 천천히 움직이며 가까운 점끼리 선으로 연결. AI / 도구 네트워크
+      // 느낌 + Pisces brand 정합 (점 + 선의 별자리).
+      //
+      // 성능: requestAnimationFrame, dot 수 viewport 폭에 비례, mobile 자동 축소.
+      // prefers-reduced-motion 시 CSS 가 canvas 숨김.
+      (function () {
+        var canvas = document.getElementById("hero-canvas");
+        if (!canvas) return;
+        var ctx = canvas.getContext("2d");
+        var dots = [];
+        var width = 0;
+        var height = 0;
+        var dpr = window.devicePixelRatio || 1;
+        var raf = 0;
+
+        function readColors() {
+          var styles = getComputedStyle(document.documentElement);
+          return {
+            dot: styles.getPropertyValue("--canvas-dot").trim() || "#94a3b8",
+            line: styles.getPropertyValue("--canvas-line").trim() || "#cbd5e1",
+          };
+        }
+        var colors = readColors();
+
+        function resize() {
+          var rect = canvas.getBoundingClientRect();
+          width = rect.width;
+          height = rect.height;
+          canvas.width = Math.floor(width * dpr);
+          canvas.height = Math.floor(height * dpr);
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          // dot 수 — 폭에 비례 (mobile 작게).
+          var target = Math.round((width * height) / 18000);
+          target = Math.max(14, Math.min(40, target));
+          if (dots.length === target) return;
+          dots = [];
+          for (var i = 0; i < target; i++) {
+            dots.push({
+              x: Math.random() * width,
+              y: Math.random() * height,
+              vx: (Math.random() - 0.5) * 0.25,
+              vy: (Math.random() - 0.5) * 0.25,
+              r: 1.4 + Math.random() * 1.2,
+            });
+          }
+        }
+
+        function step() {
+          ctx.clearRect(0, 0, width, height);
+
+          // 점 업데이트.
+          for (var i = 0; i < dots.length; i++) {
+            var d = dots[i];
+            d.x += d.vx;
+            d.y += d.vy;
+            if (d.x < 0 || d.x > width) d.vx *= -1;
+            if (d.y < 0 || d.y > height) d.vy *= -1;
+          }
+
+          // 가까운 점끼리 선.
+          var maxDist = 130;
+          ctx.lineWidth = 0.7;
+          for (var i = 0; i < dots.length; i++) {
+            for (var j = i + 1; j < dots.length; j++) {
+              var dx = dots[i].x - dots[j].x;
+              var dy = dots[i].y - dots[j].y;
+              var dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < maxDist) {
+                var alpha = 1 - dist / maxDist;
+                ctx.strokeStyle =
+                  colors.line +
+                  Math.floor(alpha * 100)
+                    .toString(16)
+                    .padStart(2, "0");
+                ctx.beginPath();
+                ctx.moveTo(dots[i].x, dots[i].y);
+                ctx.lineTo(dots[j].x, dots[j].y);
+                ctx.stroke();
+              }
+            }
+          }
+
+          // 점 그리기.
+          ctx.fillStyle = colors.dot;
+          for (var i = 0; i < dots.length; i++) {
+            var d = dots[i];
+            ctx.beginPath();
+            ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          raf = requestAnimationFrame(step);
+        }
+
+        // 테마 변경 시 색 다시 읽기.
+        var observer = new MutationObserver(function () {
+          colors = readColors();
+        });
+        observer.observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ["data-theme"],
+        });
+        // OS 변경도 반응.
+        if (window.matchMedia) {
+          var mq = window.matchMedia("(prefers-color-scheme: dark)");
+          if (mq.addEventListener) {
+            mq.addEventListener("change", function () {
+              colors = readColors();
+            });
+          }
+        }
+
+        window.addEventListener("resize", function () {
+          resize();
+        });
+
+        resize();
+        step();
+      })();
+    </script>
   </body>
 </html>
