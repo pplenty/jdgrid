@@ -523,8 +523,22 @@
           });
         }
 
-        // Easter egg — 1/5 확률로 클릭 시 supernova 효과 (3 cascading pulses + sparkle burst).
+        // Easter egg supernova 의 accent 팔레트.
+        // 라이트/다크 어느 배경에도 잘 보이는 채도 높은 색만 선택.
+        var ACCENT_COLORS = [
+          "#f59e0b", // amber
+          "#8b5cf6", // violet
+          "#06b6d4", // cyan
+          "#10b981", // emerald
+          "#ec4899", // pink
+          "#ef4444", // red
+        ];
+
+        // Easter egg — 1/10 확률로 클릭 시 supernova 효과
+        // (3 cascading pulses + sparkle burst, 매 이벤트마다 다른 accent).
         function spawnEasterEgg(px, py) {
+          // 이벤트 primary color — pulses 가 공유.
+          var primary = ACCENT_COLORS[Math.floor(Math.random() * ACCENT_COLORS.length)];
           // 3 cascading pulses (각 stagger 됨, age 음수로 시작)
           for (var i = 0; i < 3; i++) {
             pulses.push({
@@ -534,12 +548,18 @@
               x: px,
               y: py,
               special: true,
+              color: primary,
             });
           }
-          // Sparkle burst — 16 개 방사형으로 퍼지는 작은 입자
-          for (var i = 0; i < 16; i++) {
-            var angle = (i / 16) * Math.PI * 2 + Math.random() * 0.3;
+          // Sparkle burst — 18 개. 절반은 primary, 나머지는 팔레트에서 랜덤 →
+          // 다채로운 fireworks 느낌.
+          for (var i = 0; i < 18; i++) {
+            var angle = (i / 18) * Math.PI * 2 + Math.random() * 0.3;
             var speed = 1.8 + Math.random() * 2.2;
+            var color =
+              i % 2 === 0
+                ? primary
+                : ACCENT_COLORS[Math.floor(Math.random() * ACCENT_COLORS.length)];
             sparkles.push({
               x: px,
               y: py,
@@ -548,6 +568,7 @@
               age: 0,
               maxAge: 45 + Math.random() * 20,
               size: 1.4 + Math.random() * 0.8,
+              color: color,
             });
           }
         }
@@ -612,7 +633,8 @@
             pl.r = (pl.age / pl.maxAge) * Math.max(width, height) * (pl.special ? 0.75 : 0.55);
             if (pl.age >= pl.maxAge) { pulses.splice(i, 1); continue; }
             var alpha = (1 - pl.age / pl.maxAge) * (pl.special ? 0.55 : 0.35);
-            ctx.strokeStyle = hexA(pl.special ? colors.core : colors.dot, alpha);
+            var strokeColor = pl.color || (pl.special ? colors.core : colors.dot);
+            ctx.strokeStyle = hexA(strokeColor, alpha);
             ctx.lineWidth = pl.special ? 2.0 : 1.6;
             ctx.beginPath();
             ctx.arc(pl.x, pl.y, pl.r, 0, Math.PI * 2);
@@ -630,7 +652,7 @@
             if (sp.age >= sp.maxAge) { sparkles.splice(i, 1); continue; }
             var sAlpha = 1 - sp.age / sp.maxAge;
             var sSize = sp.size * sAlpha;
-            ctx.fillStyle = hexA(colors.core, sAlpha);
+            ctx.fillStyle = hexA(sp.color || colors.core, sAlpha);
             ctx.beginPath();
             ctx.arc(sp.x, sp.y, sSize, 0, Math.PI * 2);
             ctx.fill();
@@ -669,8 +691,8 @@
         canvas.addEventListener("mouseleave", function () { mouse.active = false; });
         function handleTrigger(px, py) {
           clickCount++;
-          // 1/5 확률 또는 매 7 번째 → easter egg supernova
-          if (Math.random() < 0.2 || clickCount % 7 === 0) {
+          // 1/10 확률 또는 매 10 번째 → easter egg supernova
+          if (Math.random() < 0.1 || clickCount % 10 === 0) {
             spawnEasterEgg(px, py);
           } else {
             spawnPulse(px, py);
