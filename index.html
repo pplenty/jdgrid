@@ -331,19 +331,22 @@
       <header>
         <div class="brand">
           <svg class="brand-mark" width="24" height="24" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <g transform="rotate(-22 16 16)">
-              <ellipse cx="16" cy="16" rx="14" ry="4" fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.25" />
-              <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.75">
-                <path d="M 29 16 C 23 15.5, 19 16, 17 17.5 C 14 19, 10 19, 4 17" />
-                <path d="M 3 16 C 9 16.5, 13 16, 15 14.5 C 18 13, 22 13, 28 15" />
-              </g>
-              <ellipse cx="16" cy="16" rx="3.5" ry="2" fill="currentColor" />
-              <g fill="currentColor">
-                <circle cx="25" cy="14.5" r="0.7" opacity="0.9" />
-                <circle cx="7" cy="17.5" r="0.7" opacity="0.9" />
-                <circle cx="22" cy="13" r="0.45" opacity="0.7" />
-                <circle cx="10" cy="19" r="0.45" opacity="0.7" />
-              </g>
+            <g fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.35">
+              <path d="M 16 16 C 22 20, 20 26, 11.6 29.3" />
+              <path d="M 16 16 C 10 17, 6 11, 6.5 5.8" />
+              <path d="M 16 16 C 19 10, 26 10, 29.8 13" />
+            </g>
+            <g fill="currentColor">
+              <circle cx="20.5" cy="21.8" r="1.5" />
+              <circle cx="17.1" cy="26.6" r="1" />
+              <circle cx="11.6" cy="29.3" r="0.6" />
+              <circle cx="8.7" cy="17" r="1.5" />
+              <circle cx="6.2" cy="11.7" r="1" />
+              <circle cx="6.5" cy="5.8" r="0.6" />
+              <circle cx="18.8" cy="9.2" r="1.5" />
+              <circle cx="24.7" cy="9.8" r="1" />
+              <circle cx="29.8" cy="13" r="0.6" />
+              <circle cx="16" cy="16" r="2.5" />
             </g>
           </svg>
           <span>jdgrid</span>
@@ -453,9 +456,11 @@
         var dpr = window.devicePixelRatio || 1;
         var particles = [];
         var pulses = [];
+        var sparkles = []; // easter egg burst particles
         var mouse = { x: -9999, y: -9999, active: false };
         var time = 0;
         var pulseTimer = 0;
+        var clickCount = 0;
 
         function readColors() {
           var s = getComputedStyle(document.documentElement);
@@ -507,8 +512,44 @@
           }
         }
 
-        function spawnPulse() {
-          pulses.push({ r: 0, age: 0, maxAge: 70 });
+        function spawnPulse(px, py, special) {
+          pulses.push({
+            r: 0,
+            age: 0,
+            maxAge: special ? 100 : 70,
+            x: px == null ? cx : px,
+            y: py == null ? cy : py,
+            special: !!special,
+          });
+        }
+
+        // Easter egg — 1/5 확률로 클릭 시 supernova 효과 (3 cascading pulses + sparkle burst).
+        function spawnEasterEgg(px, py) {
+          // 3 cascading pulses (각 stagger 됨, age 음수로 시작)
+          for (var i = 0; i < 3; i++) {
+            pulses.push({
+              r: 0,
+              age: -i * 10,
+              maxAge: 90,
+              x: px,
+              y: py,
+              special: true,
+            });
+          }
+          // Sparkle burst — 16 개 방사형으로 퍼지는 작은 입자
+          for (var i = 0; i < 16; i++) {
+            var angle = (i / 16) * Math.PI * 2 + Math.random() * 0.3;
+            var speed = 1.8 + Math.random() * 2.2;
+            sparkles.push({
+              x: px,
+              y: py,
+              vx: Math.cos(angle) * speed,
+              vy: Math.sin(angle) * speed,
+              age: 0,
+              maxAge: 45 + Math.random() * 20,
+              size: 1.4 + Math.random() * 0.8,
+            });
+          }
         }
 
         function step() {
@@ -567,14 +608,32 @@
           for (var i = pulses.length - 1; i >= 0; i--) {
             var pl = pulses[i];
             pl.age++;
-            pl.r = (pl.age / pl.maxAge) * Math.max(width, height) * 0.55;
+            if (pl.age < 0) continue; // stagger 대기
+            pl.r = (pl.age / pl.maxAge) * Math.max(width, height) * (pl.special ? 0.75 : 0.55);
             if (pl.age >= pl.maxAge) { pulses.splice(i, 1); continue; }
-            var alpha = (1 - pl.age / pl.maxAge) * 0.35;
-            ctx.strokeStyle = hexA(colors.dot, alpha);
-            ctx.lineWidth = 1.6;
+            var alpha = (1 - pl.age / pl.maxAge) * (pl.special ? 0.55 : 0.35);
+            ctx.strokeStyle = hexA(pl.special ? colors.core : colors.dot, alpha);
+            ctx.lineWidth = pl.special ? 2.0 : 1.6;
             ctx.beginPath();
-            ctx.arc(cx, cy, pl.r, 0, Math.PI * 2);
+            ctx.arc(pl.x, pl.y, pl.r, 0, Math.PI * 2);
             ctx.stroke();
+          }
+
+          // Sparkle burst (easter egg)
+          for (var i = sparkles.length - 1; i >= 0; i--) {
+            var sp = sparkles[i];
+            sp.age++;
+            sp.x += sp.vx;
+            sp.y += sp.vy;
+            sp.vx *= 0.96; // 감쇠
+            sp.vy *= 0.96;
+            if (sp.age >= sp.maxAge) { sparkles.splice(i, 1); continue; }
+            var sAlpha = 1 - sp.age / sp.maxAge;
+            var sSize = sp.size * sAlpha;
+            ctx.fillStyle = hexA(colors.core, sAlpha);
+            ctx.beginPath();
+            ctx.arc(sp.x, sp.y, sSize, 0, Math.PI * 2);
+            ctx.fill();
           }
 
           for (var i = 0; i < pts.length; i++) {
@@ -608,19 +667,32 @@
           mouse.active = true;
         });
         canvas.addEventListener("mouseleave", function () { mouse.active = false; });
+        function handleTrigger(px, py) {
+          clickCount++;
+          // 1/5 확률 또는 매 7 번째 → easter egg supernova
+          if (Math.random() < 0.2 || clickCount % 7 === 0) {
+            spawnEasterEgg(px, py);
+          } else {
+            spawnPulse(px, py);
+          }
+        }
         canvas.addEventListener("click", function (e) {
           var rect = canvas.getBoundingClientRect();
-          mouse.x = e.clientX - rect.left;
-          mouse.y = e.clientY - rect.top;
-          spawnPulse();
+          var px = e.clientX - rect.left;
+          var py = e.clientY - rect.top;
+          mouse.x = px;
+          mouse.y = py;
+          handleTrigger(px, py);
         });
         canvas.addEventListener("touchstart", function (e) {
           if (e.touches.length === 0) return;
           var rect = canvas.getBoundingClientRect();
-          mouse.x = e.touches[0].clientX - rect.left;
-          mouse.y = e.touches[0].clientY - rect.top;
+          var px = e.touches[0].clientX - rect.left;
+          var py = e.touches[0].clientY - rect.top;
+          mouse.x = px;
+          mouse.y = py;
           mouse.active = true;
-          spawnPulse();
+          handleTrigger(px, py);
         }, { passive: true });
 
         var observer = new MutationObserver(function () { colors = readColors(); });
