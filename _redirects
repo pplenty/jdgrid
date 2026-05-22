@@ -2,11 +2,12 @@
 #
 # Cloudflare evaluates _redirects BEFORE serving static assets (unlike Netlify),
 # so a naked `/* / 302` rule would catch even `/` and loop on itself.
-# Pin every known path with a 200 rewrite first so the catch-all only sees
-# unknown paths. First match wins.
+# Pin every known path with a 200 rewrite first so they bypass any wildcard.
 #
-# When adding a new page (e.g. /docs), add a matching rewrite line BEFORE the
-# catch-all and rerun seo-consistency-check.
+# Note (2026-05-22): a splat catch-all (`/*  /  302`) was tried for unknown
+# paths but Cloudflare Pages returns 404 before evaluating it. Unknown paths
+# are handled by 404.html (client-side replace to /) instead. When adding a
+# new page, add a matching rewrite line below and rerun seo-consistency-check.
 
 /             /index.html          200
 /about        /about/index.html    200
@@ -18,6 +19,3 @@
 /favicon.svg  /favicon.svg         200
 /sitemap.xml  /sitemap.xml         200
 /robots.txt   /robots.txt          200
-
-# Unknown paths (/ko, /blog/foo, etc) → home, 302 temporary.
-/*            /                    302
