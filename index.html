@@ -243,6 +243,9 @@
         border-color: var(--fg-muted);
         text-decoration: none;
       }
+      .project + .project {
+        margin-top: 16px;
+      }
       .project-head {
         display: flex;
         align-items: baseline;
@@ -276,6 +279,14 @@
         0%   { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.55); }
         70%  { box-shadow: 0 0 0 7px rgba(22, 163, 74, 0); }
         100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+      }
+      /* 준비중 — amber 정적 dot (펄스 없음으로 Live 와 구분) */
+      .project-status.is-soon {
+        color: #f59e0b;
+      }
+      .project-status.is-soon::before {
+        background: #f59e0b;
+        animation: none;
       }
       .project-desc {
         color: var(--fg-muted);
@@ -424,12 +435,31 @@
             <span class="project-status">Live</span>
           </div>
           <p class="project-desc">
-            66 free dev tools and 26 guides. JSON formatting, JWT decoding,
-            Kubernetes YAML visualization, regex testing, and more — all
-            running entirely in your browser. Available in Korean and
-            English.
+            66 in-browser dev tools and 26 guides. KR/EN.
           </p>
           <span class="project-link">yutils.jdgrid.com →</span>
+        </a>
+
+        <a class="project" href="https://trading.jdgrid.com">
+          <div class="project-head">
+            <span class="project-name">trading</span>
+            <span class="project-status">Live</span>
+          </div>
+          <p class="project-desc">
+            Stock backtests with 26 indicators across 80 tickers.
+          </p>
+          <span class="project-link">trading.jdgrid.com →</span>
+        </a>
+
+        <a class="project" href="https://trends.jdgrid.com">
+          <div class="project-head">
+            <span class="project-name">trends</span>
+            <span class="project-status is-soon">Soon</span>
+          </div>
+          <p class="project-desc">
+            Trend signals from public data.
+          </p>
+          <span class="project-link">trends.jdgrid.com →</span>
         </a>
 
         <hr class="divider" />
