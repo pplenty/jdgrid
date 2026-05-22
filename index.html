@@ -98,6 +98,7 @@
         -webkit-font-smoothing: antialiased;
         font-size: 16px;
         transition: background-color 0.2s ease, color 0.2s ease;
+        overflow-x: hidden; /* hero-canvas 가 데스크탑에서 100vw 로 펼쳐질 때 수평 스크롤바 방지 */
       }
       a {
         color: var(--fg);
@@ -269,6 +270,12 @@
         height: 6px;
         border-radius: 50%;
         background: #16a34a;
+        animation: live-pulse 2s ease-out infinite;
+      }
+      @keyframes live-pulse {
+        0%   { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.55); }
+        70%  { box-shadow: 0 0 0 7px rgba(22, 163, 74, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
       }
       .project-desc {
         color: var(--fg-muted);
@@ -328,9 +335,25 @@
           font-size: 19px;
         }
       }
+      /* 데스크탑: galaxy 캔버스를 viewport 전체 너비로 펼침. wrap 의 max-width(640px) 안에
+         묶여 작게 보이던 시각화가 가로로 시원해지고, hero min-height 도 늘려 spiral 의
+         maxR(min(width,height)*0.48) 가 함께 커지도록 함. 텍스트는 wrap 안에 그대로. */
+      @media (min-width: 768px) {
+        .hero {
+          min-height: 560px;
+        }
+        .hero-canvas {
+          left: calc(50% - 50vw);
+          right: calc(50% - 50vw);
+          width: auto;
+        }
+      }
       @media (prefers-reduced-motion: reduce) {
         .hero-canvas {
           display: none;
+        }
+        .project-status::before {
+          animation: none;
         }
       }
     </style>
