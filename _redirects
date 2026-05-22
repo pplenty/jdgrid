@@ -1,0 +1,7 @@
+# Cloudflare Pages redirects.
+# Existing static assets (/, /about, /privacy, /terms, /favicon.svg,
+# /sitemap.xml, /robots.txt) are served first; this catch-all only fires
+# when no static file matches — i.e. true 404s — and sends visitors home.
+# 302 (temporary) on purpose: keeps future paths like /ko/ free to claim.
+
+/*  /  302
