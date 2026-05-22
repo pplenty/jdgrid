@@ -19,8 +19,9 @@
 - 모바일 반응형
 - 총 ~25 KB
 
-URL 은 extension-less (`/about`, `/privacy`, `/terms`) — Cloudflare Pages 가
-`about/index.html` 을 자동으로 `/about` 으로 서빙.
+URL 은 trailing slash 형식 (`/about/`, `/privacy/`, `/terms/`) — Cloudflare Workers Builds 가
+`about/index.html` 을 `/about/` 로 서빙하고 `/about` 접근 시 307 redirect 로 자동 정규화.
+canonical 과 sitemap 도 같은 형식으로 맞춰져 있음.
 
 ## 콘텐츠 업데이트
 
