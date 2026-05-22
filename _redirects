@@ -1,0 +1,23 @@
+# Cloudflare Pages redirects.
+#
+# Cloudflare evaluates _redirects BEFORE serving static assets (unlike Netlify),
+# so a naked `/* / 302` rule would catch even `/` and loop on itself.
+# Pin every known path with a 200 rewrite first so the catch-all only sees
+# unknown paths. First match wins.
+#
+# When adding a new page (e.g. /docs), add a matching rewrite line BEFORE the
+# catch-all and rerun seo-consistency-check.
+
+/             /index.html          200
+/about        /about/index.html    200
+/about/       /about/index.html    200
+/privacy      /privacy/index.html  200
+/privacy/     /privacy/index.html  200
+/terms        /terms/index.html    200
+/terms/       /terms/index.html    200
+/favicon.svg  /favicon.svg         200
+/sitemap.xml  /sitemap.xml         200
+/robots.txt   /robots.txt          200
+
+# Unknown paths (/ko, /blog/foo, etc) → home, 302 temporary.
+/*            /                    302
