@@ -3,18 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>jdgrid — solo developer building open utilities</title>
+    <title>jdgrid — open dev tools &amp; experiments</title>
     <meta
       name="description"
-      content="jdgrid is a solo developer building open dev utilities. Current project: yutils, a free collection of 66 browser-based dev tools and 26 guides."
+      content="Open, browser-based dev tools and experiments — yutils, trading, trends, and more."
     />
     <link rel="canonical" href="https://jdgrid.com/" />
     <meta name="google-adsense-account" content="ca-pub-1005049417920340" />
     <meta name="theme-color" content="#0f172a" />
-    <meta property="og:title" content="jdgrid — solo developer building open utilities" />
+    <meta property="og:title" content="Welcome to my galaxy" />
     <meta
       property="og:description"
-      content="Free dev tools and writing. Current project: yutils."
+      content="Open dev tools &amp; experiments. yutils, trading, trends, and more."
     />
     <meta property="og:url" content="https://jdgrid.com/" />
     <meta property="og:type" content="website" />
@@ -246,6 +246,13 @@
       .project + .project {
         margin-top: 16px;
       }
+      /* 도메인 미정 — 클릭 비활성 카드 (hover 강조 끔) */
+      .project--soon {
+        cursor: default;
+      }
+      .project--soon:hover {
+        border-color: var(--line);
+      }
       .project-head {
         display: flex;
         align-items: baseline;
@@ -454,13 +461,23 @@
         <a class="project" href="https://trends.jdgrid.com">
           <div class="project-head">
             <span class="project-name">trends</span>
-            <span class="project-status is-soon">Soon</span>
+            <span class="project-status">Live</span>
           </div>
           <p class="project-desc">
             Trend signals from public data.
           </p>
           <span class="project-link">trends.jdgrid.com →</span>
         </a>
+
+        <div class="project project--soon">
+          <div class="project-head">
+            <span class="project-name">next</span>
+            <span class="project-status is-soon">Soon</span>
+          </div>
+          <p class="project-desc">
+            A new tool taking shape — details to come.
+          </p>
+        </div>
 
         <hr class="divider" />
 
