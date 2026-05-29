@@ -1,50 +1,73 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <radialGradient id="bg" cx="68%" cy="48%" r="72%">
-      <stop offset="0%" stop-color="#131c2e" />
-      <stop offset="62%" stop-color="#0c1018" />
-      <stop offset="100%" stop-color="#070708" />
+    <radialGradient id="bg" cx="58%" cy="42%" r="85%">
+      <stop offset="0%" stop-color="#1c1638" />
+      <stop offset="52%" stop-color="#0f0b20" />
+      <stop offset="100%" stop-color="#070510" />
+    </radialGradient>
+    <!-- nebula clouds — blur 대신 radialGradient 로 부드럽게 번지게 -->
+    <radialGradient id="neb-violet" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.55" />
+      <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="neb-teal" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.42" />
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="neb-pink" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ec4899" stop-opacity="0.40" />
+      <stop offset="100%" stop-color="#ec4899" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="neb-indigo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.32" />
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0" />
     </radialGradient>
     <radialGradient id="core" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#ffffff" />
-      <stop offset="55%" stop-color="#e8eef6" />
-      <stop offset="100%" stop-color="#aab6c8" />
+      <stop offset="48%" stop-color="#ede9fe" />
+      <stop offset="100%" stop-color="#a78bfa" />
     </radialGradient>
     <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#cfe0f4" stop-opacity="0.55" />
-      <stop offset="100%" stop-color="#cfe0f4" stop-opacity="0" />
+      <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.65" />
+      <stop offset="100%" stop-color="#c4b5fd" stop-opacity="0" />
     </radialGradient>
   </defs>
 
   <rect width="1200" height="630" fill="url(#bg)" />
 
-  <!-- spiral galaxy — favicon 과 동일한 로그 스파이럴 공식, 우측에 확대 배치 -->
+  <!-- 성운 구름 — 우측·중앙에 겹쳐 몽환적 색 번짐 (좌측 텍스트 영역은 어둡게 유지) -->
+  <ellipse cx="860" cy="220" rx="440" ry="380" fill="url(#neb-violet)" />
+  <ellipse cx="1000" cy="430" rx="360" ry="320" fill="url(#neb-teal)" />
+  <ellipse cx="720" cy="500" rx="320" ry="280" fill="url(#neb-pink)" />
+  <ellipse cx="640" cy="170" rx="400" ry="340" fill="url(#neb-indigo)" />
+
+  <!-- spiral galaxy — favicon 과 동일한 로그 스파이럴 공식 -->
   <g transform="translate(566, 27) scale(18)">
-    <g fill="none" stroke="#51616b" stroke-width="0.8" stroke-linecap="round" opacity="0.45">
+    <g fill="none" stroke="#b8a8e0" stroke-width="0.8" stroke-linecap="round" opacity="0.4">
       <path d="M 16 16 C 22 20, 20 26, 11.6 29.3" />
       <path d="M 16 16 C 10 17, 6 11, 6.5 5.8" />
       <path d="M 16 16 C 19 10, 26 10, 29.8 13" />
     </g>
     <g>
-      <circle cx="20.5" cy="21.8" r="1.5" fill="#cbd5e1" />
-      <circle cx="17.1" cy="26.6" r="1" fill="#f59e0b" />
-      <circle cx="11.6" cy="29.3" r="0.6" fill="#94a3b8" />
-      <circle cx="8.7" cy="17" r="1.5" fill="#06b6d4" />
-      <circle cx="6.2" cy="11.7" r="1" fill="#cbd5e1" />
-      <circle cx="6.5" cy="5.8" r="0.6" fill="#94a3b8" />
-      <circle cx="18.8" cy="9.2" r="1.5" fill="#8b5cf6" />
-      <circle cx="24.7" cy="9.8" r="1" fill="#cbd5e1" />
-      <circle cx="29.8" cy="13" r="0.6" fill="#94a3b8" />
+      <circle cx="20.5" cy="21.8" r="1.5" fill="#e9d5ff" />
+      <circle cx="17.1" cy="26.6" r="1" fill="#f0abfc" />
+      <circle cx="11.6" cy="29.3" r="0.6" fill="#a5b4fc" />
+      <circle cx="8.7" cy="17" r="1.5" fill="#67e8f9" />
+      <circle cx="6.2" cy="11.7" r="1" fill="#ddd6fe" />
+      <circle cx="6.5" cy="5.8" r="0.6" fill="#a5b4fc" />
+      <circle cx="18.8" cy="9.2" r="1.5" fill="#c4b5fd" />
+      <circle cx="24.7" cy="9.8" r="1" fill="#f5d0fe" />
+      <circle cx="29.8" cy="13" r="0.6" fill="#a5b4fc" />
     </g>
-    <circle cx="16" cy="16" r="6" fill="url(#coreGlow)" />
+    <circle cx="16" cy="16" r="7" fill="url(#coreGlow)" />
     <circle cx="16" cy="16" r="2.6" fill="url(#core)" />
   </g>
 
   <!-- 좌측 텍스트 -->
   <text x="96" y="300" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
-        font-size="104" font-weight="700" letter-spacing="-4" fill="#f1f5f9">jdgrid</text>
+        font-size="104" font-weight="700" letter-spacing="-4" fill="#f5f3ff">jdgrid</text>
   <text x="100" y="368" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
-        font-size="42" font-weight="400" letter-spacing="-0.5" fill="#9aa7b8">Welcome to my galaxy</text>
+        font-size="42" font-weight="400" letter-spacing="-0.5" fill="#c4b5fd">Welcome to my galaxy</text>
   <text x="100" y="420" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
-        font-size="24" font-weight="500" letter-spacing="2" fill="#5b6675">OPEN DEV TOOLS &amp; EXPERIMENTS</text>
+        font-size="24" font-weight="500" letter-spacing="2" fill="#8b7fb0">OPEN DEV TOOLS &amp; EXPERIMENTS</text>
 </svg>
