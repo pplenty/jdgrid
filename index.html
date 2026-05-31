@@ -229,6 +229,16 @@
         max-width: 520px;
         margin: 0 0 48px;
       }
+      .intro {
+        color: var(--fg-muted);
+        font-size: 16px;
+        line-height: 1.65;
+        max-width: 560px;
+        margin: 0;
+      }
+      .intro + .intro {
+        margin-top: 14px;
+      }
       .section-label {
         font-size: 12px;
         font-weight: 600;
@@ -438,6 +448,18 @@
           </p>
         </section>
 
+        <p class="intro">
+          jdgrid is a growing collection of browser-first tools for developers —
+          each focused on a single job and shipped as its own site. Everything
+          runs client-side, needs no account, and comes with its own
+          documentation.
+        </p>
+        <p class="intro">
+          No login walls, no paywalls, no dark patterns — open the link and the
+          tool just works. The projects below are live today, with more taking
+          shape.
+        </p>
+
         <h2 class="section-label" id="projects">Projects</h2>
 
         <a class="project" href="https://yutils.jdgrid.com">
@@ -446,7 +468,10 @@
             <span class="project-status">Live</span>
           </div>
           <p class="project-desc">
-            66 in-browser dev tools and 26 guides. KR/EN.
+            76 browser-based dev tools and 118 guides — JSON formatting, JWT
+            decoding, regex testing, Kubernetes YAML, and much more. No install,
+            no sign-up; everything runs in your browser. Available in Korean and
+            English.
           </p>
           <span class="project-link">yutils.jdgrid.com →</span>
         </a>
@@ -457,7 +482,9 @@
             <span class="project-status">Live</span>
           </div>
           <p class="project-desc">
-            Stock backtests with 26 indicators across 80 tickers.
+            Backtest trading strategies across 80 tickers with 26 technical
+            indicators. Run entry and exit rules against historical data and
+            compare the results — right in the browser.
           </p>
           <span class="project-link">trading.jdgrid.com →</span>
         </a>
@@ -468,7 +495,8 @@
             <span class="project-status">Live</span>
           </div>
           <p class="project-desc">
-            Trend signals from public data.
+            Trend signals surfaced from public data — track what's gaining
+            momentum and spot shifts as they happen.
           </p>
           <span class="project-link">trends.jdgrid.com →</span>
         </a>
